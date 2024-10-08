@@ -1,8 +1,8 @@
 import pandas as pd
 import streamlit as st
 
-# URL to your Excel file on GitHub
-excel_url = "https://github.com/anuragpande1977/COSMETICS-INFO/raw/main/Cosmetic%20book.xlsx"
+# Corrected URL to your Excel file on GitHub
+excel_url = "https://raw.githubusercontent.com/anuragpande1977/COSMETICS-INFO/main/Cosmetic%20book.xlsx"
 
 # Read Excel file from GitHub
 df = pd.read_excel(excel_url, sheet_name="Sheet1")
