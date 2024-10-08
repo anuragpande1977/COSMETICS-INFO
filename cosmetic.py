@@ -61,15 +61,22 @@ filtered_df = df[df['FUNCTION/ACTIVITY'].apply(lambda x: function in [f.strip() 
                  df['FORMULATION FORMAT'].apply(lambda x: product_type in [f.strip() for f in x]) &
                  df['FORMULATION FORMAT'].apply(lambda x: format in [f.strip() for f in x])]
 
-# Display the results
-for index, row in filtered_df.iterrows():
-    st.subheader(f"Product: {row['PRODUCT NAME']}")
-    st.write(f"**INCI Name**: {row['INCI NAME']}")
-    st.write(f"**Source**: {row['SOURCE (NAME AND PART)']}")
-    st.write(f"**Bioactive Percentage**: {row['BIOACTIVE PERCENTAGE']}")
-    st.write(f"**Appearance**: {row['APPEARANCE']}")
-    st.write(f"**Suggested Concentration**: {row['SUGGESTED CONCENTRATION']}")
-    st.write(f"**Marketing Claims**: {row['MARKETING CLAIMS']}")
+# Debugging: Display the filtered DataFrame
+st.write("Filtered Data:")
+st.write(filtered_df)
+
+# Display the results or provide feedback if no results found
+if not filtered_df.empty:
+    for index, row in filtered_df.iterrows():
+        st.subheader(f"Product: {row['PRODUCT NAME']}")
+        st.write(f"**INCI Name**: {row['INCI NAME']}")
+        st.write(f"**Source**: {row['SOURCE (NAME AND PART)']}")
+        st.write(f"**Bioactive Percentage**: {row['BIOACTIVE PERCENTAGE']}")
+        st.write(f"**Appearance**: {row['APPEARANCE']}")
+        st.write(f"**Suggested Concentration**: {row['SUGGESTED CONCENTRATION']}")
+        st.write(f"**Marketing Claims**: {row['MARKETING CLAIMS']}")
+else:
+    st.write("No products found matching your criteria. Please try a different selection.")
 
 # Footer with the data source
 st.write("Data sourced from cosmetics.csv uploaded on GitHub")
