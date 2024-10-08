@@ -7,6 +7,16 @@ csv_url = "https://raw.githubusercontent.com/anuragpande1977/COSMETICS-INFO/main
 # Read CSV file from GitHub
 df = pd.read_csv(csv_url)
 
+# Split the "FUNCTION/ACTIVITY" column by commas and create a set of unique functions
+df['FUNCTION/ACTIVITY'] = df['FUNCTION/ACTIVITY'].str.split(',')
+all_functions = set()
+for function_list in df['FUNCTION/ACTIVITY']:
+    for function in function_list:
+        all_functions.add(function.strip())
+
+# Convert the set to a sorted list for the dropdown
+function_options = sorted(list(all_functions))
+
 # Set the page style to add some color to the input widgets
 st.markdown("""
     <style>
@@ -21,12 +31,12 @@ st.markdown("""
 # Streamlit app title
 st.title("Cosmetic Ingredient Finder")
 
-# User inputs: Select function and formulation format using the correct column names
-function = st.selectbox("Select a cosmetic function/activity:", df['FUNCTION/ACTIVITY'].unique(), key="function_selectbox")
+# User inputs: Select a unique function and formulation format
+function = st.selectbox("Select a cosmetic function/activity:", function_options, key="function_selectbox")
 format = st.selectbox("Select a formulation format:", df['FORMULATION FORMAT'].unique(), key="format_selectbox")
 
 # Filter the data based on user input
-filtered_df = df[(df['FUNCTION/ACTIVITY'] == function) & (df['FORMULATION FORMAT'] == format)]
+filtered_df = df[df['FUNCTION/ACTIVITY'].apply(lambda x: function in [f.strip() for f in x]) & (df['FORMULATION FORMAT'] == format)]
 
 # Display the results
 for index, row in filtered_df.iterrows():
@@ -40,4 +50,3 @@ for index, row in filtered_df.iterrows():
 
 # Footer with the data source
 st.write("Data sourced from cosmetics.csv uploaded on GitHub")
-
