@@ -3,7 +3,7 @@ import streamlit as st
 import requests
 from io import BytesIO
 
-# URL to your Excel file on GitHub
+# Correct URL to your Excel file on GitHub
 excel_url = "https://raw.githubusercontent.com/anuragpande1977/COSMETICS-INFO/main/Cosmetic%20book.xlsx"
 
 # Download the Excel file
@@ -48,3 +48,4 @@ else:
 
     # Footer with the data source
     st.write("Data sourced from Cosmetic Book Excel uploaded on GitHub")
+
