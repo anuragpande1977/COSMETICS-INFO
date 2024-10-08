@@ -7,14 +7,21 @@ csv_url = "https://raw.githubusercontent.com/anuragpande1977/COSMETICS-INFO/main
 # Read CSV file from GitHub
 df = pd.read_csv(csv_url)
 
-# Assuming that the "FORMULATION FORMAT" column contains both product type (LEAVE ON, RINSE OFF) and individual formats in parentheses
+# Split the "FUNCTION/ACTIVITY" and "FORMULATION FORMAT" columns by commas and parentheses where applicable
+df['FUNCTION/ACTIVITY'] = df['FUNCTION/ACTIVITY'].apply(lambda x: str(x).split(',') if pd.notna(x) else [])
 df['FORMULATION FORMAT'] = df['FORMULATION FORMAT'].apply(lambda x: str(x).replace(')', '').replace('(', '').split(',') if pd.notna(x) else [])
 
-# Initialize empty sets to store unique product types and formats
+# Initialize empty sets to store unique functions, product types, and formats
+all_functions = set()
 all_product_types = set()
 all_formats = set()
 
 # Separate product types (LEAVE ON, RINSE OFF) and individual formats (serum, cream, etc.)
+for function_list in df['FUNCTION/ACTIVITY']:
+    if isinstance(function_list, list):
+        for function in function_list:
+            all_functions.add(function.strip())
+
 for format_list in df['FORMULATION FORMAT']:
     if isinstance(format_list, list):
         for format_item in format_list:
@@ -25,7 +32,8 @@ for format_list in df['FORMULATION FORMAT']:
             else:
                 all_formats.add(format_item)
 
-# Convert the sets to sorted lists for the dropdown
+# Convert the sets to sorted lists for the dropdowns
+function_options = sorted(list(all_functions))
 product_type_options = sorted(list(all_product_types))
 format_options = sorted(list(all_formats))
 
@@ -43,12 +51,15 @@ st.markdown("""
 # Streamlit app title
 st.title("Cosmetic Ingredient Finder")
 
-# User inputs: Select product type (LEAVE ON/RINSE OFF) and formulation format
+# User inputs: Select function/activity, product type (LEAVE ON/RINSE OFF), and formulation format
+function = st.selectbox("Select a cosmetic function/activity:", function_options, key="function_selectbox")
 product_type = st.selectbox("Select a product type (LEAVE ON/RINSE OFF):", product_type_options, key="product_type_selectbox")
 format = st.selectbox("Select a formulation format:", format_options, key="format_selectbox")
 
 # Filter the data based on user input
-filtered_df = df[df['FORMULATION FORMAT'].apply(lambda x: product_type in [f.strip() for f in x]) & df['FORMULATION FORMAT'].apply(lambda x: format in [f.strip() for f in x])]
+filtered_df = df[df['FUNCTION/ACTIVITY'].apply(lambda x: function in [f.strip() for f in x]) &
+                 df['FORMULATION FORMAT'].apply(lambda x: product_type in [f.strip() for f in x]) &
+                 df['FORMULATION FORMAT'].apply(lambda x: format in [f.strip() for f in x])]
 
 # Display the results
 for index, row in filtered_df.iterrows():
@@ -62,4 +73,3 @@ for index, row in filtered_df.iterrows():
 
 # Footer with the data source
 st.write("Data sourced from cosmetics.csv uploaded on GitHub")
-
