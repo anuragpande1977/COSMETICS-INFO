@@ -8,11 +8,16 @@ csv_url = "https://raw.githubusercontent.com/anuragpande1977/COSMETICS-INFO/main
 df = pd.read_csv(csv_url)
 
 # Split the "FUNCTION/ACTIVITY" column by commas and create a set of unique functions
-df['FUNCTION/ACTIVITY'] = df['FUNCTION/ACTIVITY'].str.split(',')
+df['FUNCTION/ACTIVITY'] = df['FUNCTION/ACTIVITY'].apply(lambda x: str(x).split(',') if pd.notna(x) else [])
+
+# Initialize an empty set to store unique functions
 all_functions = set()
+
+# Loop through the list of functions for each row
 for function_list in df['FUNCTION/ACTIVITY']:
-    for function in function_list:
-        all_functions.add(function.strip())
+    if isinstance(function_list, list):  # Ensure that function_list is a list
+        for function in function_list:
+            all_functions.add(function.strip())
 
 # Convert the set to a sorted list for the dropdown
 function_options = sorted(list(all_functions))
