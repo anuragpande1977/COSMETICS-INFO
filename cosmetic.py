@@ -21,22 +21,23 @@ st.markdown("""
 # Streamlit app title
 st.title("Cosmetic Ingredient Finder")
 
-# User inputs: Select function and formulation format
-function = st.selectbox("Select a cosmetic function/activity:", df['Function/Activity'].unique(), key="function_selectbox")
-format = st.selectbox("Select a formulation format:", df['Formulation Format'].unique(), key="format_selectbox")
+# User inputs: Select function and formulation format using the correct column names
+function = st.selectbox("Select a cosmetic function/activity:", df['FUNCTION/ACTIVITY'].unique(), key="function_selectbox")
+format = st.selectbox("Select a formulation format:", df['FORMULATION FORMAT'].unique(), key="format_selectbox")
 
 # Filter the data based on user input
-filtered_df = df[(df['Function/Activity'] == function) & (df['Formulation Format'] == format)]
+filtered_df = df[(df['FUNCTION/ACTIVITY'] == function) & (df['FORMULATION FORMAT'] == format)]
 
 # Display the results
 for index, row in filtered_df.iterrows():
-    st.subheader(f"Product: {row['Product Name']}")
-    st.write(f"**INCI Name**: {row['INCI Name']}")
-    st.write(f"**Source**: {row['Source (Name and Part)']}")
-    st.write(f"**Bioactive Percentage**: {row['Bioactive Percentage']}")
-    st.write(f"**Appearance**: {row['Appearance']}")
-    st.write(f"**Suggested Concentration**: {row['Suggested Concentration']}")
-    st.write(f"**Marketing Claims**: {row['Marketing Claims']}")
+    st.subheader(f"Product: {row['PRODUCT NAME']}")
+    st.write(f"**INCI Name**: {row['INCI NAME']}")
+    st.write(f"**Source**: {row['SOURCE (NAME AND PART)']}")
+    st.write(f"**Bioactive Percentage**: {row['BIOACTIVE PERCENTAGE']}")
+    st.write(f"**Appearance**: {row['APPEARANCE']}")
+    st.write(f"**Suggested Concentration**: {row['SUGGESTED CONCENTRATION']}")
+    st.write(f"**Marketing Claims**: {row['MARKETING CLAIMS']}")
 
 # Footer with the data source
 st.write("Data sourced from cosmetics.csv uploaded on GitHub")
+
