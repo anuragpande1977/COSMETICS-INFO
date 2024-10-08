@@ -55,16 +55,31 @@ if not filtered_products.empty:
     
     if not final_product_details.empty:
         row = final_product_details.iloc[0]  # Assuming only one row matches the selection
-        st.subheader(f"Product: {row['PRODUCT NAME']}")
-        st.write(f"**INCI Name**: {row['INCI NAME']}")
-        st.write(f"**Source**: {row['SOURCE (NAME AND PART)']}")
-        st.write(f"**Bioactive Percentage**: {row['BIOACTIVE PERCENTAGE']}")
-        st.write(f"**Appearance**: {row['APPEARANCE']}")
-        st.write(f"**Suggested Concentration**: {row['SUGGESTED CONCENTRATION']}")
-        st.write(f"**Marketing Claims**: {row['MARKETING CLAIMS']}")
+
+        # Create a styled table with product details
+        product_data = {
+            "INCI Name": [row['INCI NAME']],
+            "Source": [row['SOURCE (NAME AND PART)']],
+            "Bioactive Percentage": [row['BIOACTIVE PERCENTAGE']],
+            "Appearance": [row['APPEARANCE']],
+            "Suggested Concentration": [row['SUGGESTED CONCENTRATION']],
+            "Marketing Claims": [row['MARKETING CLAIMS']]
+        }
+        product_df = pd.DataFrame(product_data)
+
+        # Display the styled table
+        st.subheader(f"Product Details for {row['PRODUCT NAME']}")
+        st.dataframe(product_df.style.set_properties(**{
+            'background-color': '#F5F5F5',
+            'color': '#000000',
+            'border-color': 'white',
+            'font-size': '14px',
+            'text-align': 'left',
+        }))
 else:
     st.write("No products found matching your selection.")
 
 # Footer with the data source
 st.write("Data sourced from cosmetics.csv uploaded on GitHub")
+
 
