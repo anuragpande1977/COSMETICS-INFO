@@ -22,7 +22,7 @@ for function_list in df['FUNCTION/ACTIVITY']:
 # Convert the set to a sorted list for the dropdown
 function_options = sorted(list(all_functions))
 
-# Set the page style to add some color to the input widgets
+# Set the page style to add some color to the input widgets and make the output box yellow
 st.markdown("""
     <style>
     .stSelectbox, .stButton {
@@ -31,10 +31,11 @@ st.markdown("""
         padding: 10px;
     }
     .styled-block {
-        background-color: #F9F9F9;
+        background-color: #FFFACD;  /* Yellow background */
         border-radius: 10px;
-        padding: 15px;
-        margin-bottom: 10px;
+        padding: 20px;
+        margin-bottom: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
     .styled-block h4 {
         margin-top: 0;
@@ -65,7 +66,7 @@ if not filtered_products.empty:
     if not final_product_details.empty:
         row = final_product_details.iloc[0]  # Assuming only one row matches the selection
 
-        # Display product details in a visually appealing text block
+        # Display product details in a yellow, visually appealing text block
         st.subheader(f"Product: {row['PRODUCT NAME']}")
         
         st.markdown(f"""
