@@ -30,6 +30,15 @@ st.markdown("""
         border: 2px solid #ADD8E6;
         padding: 10px;
     }
+    .styled-block {
+        background-color: #F9F9F9;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 10px;
+    }
+    .styled-block h4 {
+        margin-top: 0;
+    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -56,39 +65,20 @@ if not filtered_products.empty:
     if not final_product_details.empty:
         row = final_product_details.iloc[0]  # Assuming only one row matches the selection
 
-        # Create a styled table with product details split into two rows
-        product_data_row1 = {
-            "INCI Name": [row['INCI NAME']],
-            "Source": [row['SOURCE (NAME AND PART)']],
-            "Bioactive Percentage": [row['BIOACTIVE PERCENTAGE']],
-        }
+        # Display product details in a visually appealing text block
+        st.subheader(f"Product: {row['PRODUCT NAME']}")
         
-        product_data_row2 = {
-            "Appearance": [row['APPEARANCE']],
-            "Suggested Concentration": [row['SUGGESTED CONCENTRATION']],
-            "Marketing Claims": [row['MARKETING CLAIMS']]
-        }
-        
-        # Display the first row of product details
-        st.subheader(f"Product Details for {row['PRODUCT NAME']}")
-        st.write("Product Information (Row 1):")
-        st.dataframe(pd.DataFrame(product_data_row1).style.set_properties(**{
-            'background-color': '#F5F5F5',
-            'color': '#000000',
-            'border-color': 'white',
-            'font-size': '14px',
-            'text-align': 'left',
-        }))
-        
-        # Display the second row of product details
-        st.write("Product Information (Row 2):")
-        st.dataframe(pd.DataFrame(product_data_row2).style.set_properties(**{
-            'background-color': '#F5F5F5',
-            'color': '#000000',
-            'border-color': 'white',
-            'font-size': '14px',
-            'text-align': 'left',
-        }))
+        st.markdown(f"""
+        <div class="styled-block">
+            <h4>INCI Name:</h4> {row['INCI NAME']}<br>
+            <h4>Source:</h4> {row['SOURCE (NAME AND PART)']}<br>
+            <h4>Bioactive Percentage:</h4> {row['BIOACTIVE PERCENTAGE']}<br>
+            <h4>Appearance:</h4> {row['APPEARANCE']}<br>
+            <h4>Suggested Concentration:</h4> {row['SUGGESTED CONCENTRATION']}<br>
+            <h4>Marketing Claims:</h4> {row['MARKETING CLAIMS']}
+        </div>
+        """, unsafe_allow_html=True)
+
 else:
     st.write("No products found matching your selection.")
 
