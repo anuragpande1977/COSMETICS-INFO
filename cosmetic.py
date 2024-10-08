@@ -56,20 +56,33 @@ if not filtered_products.empty:
     if not final_product_details.empty:
         row = final_product_details.iloc[0]  # Assuming only one row matches the selection
 
-        # Create a styled table with product details
-        product_data = {
+        # Create a styled table with product details split into two rows
+        product_data_row1 = {
             "INCI Name": [row['INCI NAME']],
             "Source": [row['SOURCE (NAME AND PART)']],
             "Bioactive Percentage": [row['BIOACTIVE PERCENTAGE']],
+        }
+        
+        product_data_row2 = {
             "Appearance": [row['APPEARANCE']],
             "Suggested Concentration": [row['SUGGESTED CONCENTRATION']],
             "Marketing Claims": [row['MARKETING CLAIMS']]
         }
-        product_df = pd.DataFrame(product_data)
-
-        # Display the styled table
+        
+        # Display the first row of product details
         st.subheader(f"Product Details for {row['PRODUCT NAME']}")
-        st.dataframe(product_df.style.set_properties(**{
+        st.write("Product Information (Row 1):")
+        st.dataframe(pd.DataFrame(product_data_row1).style.set_properties(**{
+            'background-color': '#F5F5F5',
+            'color': '#000000',
+            'border-color': 'white',
+            'font-size': '14px',
+            'text-align': 'left',
+        }))
+        
+        # Display the second row of product details
+        st.write("Product Information (Row 2):")
+        st.dataframe(pd.DataFrame(product_data_row2).style.set_properties(**{
             'background-color': '#F5F5F5',
             'color': '#000000',
             'border-color': 'white',
@@ -81,5 +94,3 @@ else:
 
 # Footer with the data source
 st.write("Data sourced from cosmetics.csv uploaded on GitHub")
-
-
