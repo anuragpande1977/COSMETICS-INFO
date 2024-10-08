@@ -33,18 +33,28 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# Streamlit app title
+# Step 1: User selects function/activity
 st.title("Cosmetic Ingredient Finder")
-
-# User inputs: Select function/activity
 function = st.selectbox("Select a cosmetic function/activity:", function_options, key="function_selectbox")
 
-# Filter the data based on user input
-filtered_df = df[df['FUNCTION/ACTIVITY'].apply(lambda x: function in [f.strip() for f in x])]
+# Step 2: Filter products based on function/activity
+filtered_products = df[df['FUNCTION/ACTIVITY'].apply(lambda x: function in [f.strip() for f in x])]
 
-# Display the results
-if not filtered_df.empty:
-    for index, row in filtered_df.iterrows():
+if not filtered_products.empty:
+    # Step 3: Display the product names for the user to select
+    product_names = filtered_products['PRODUCT NAME'].unique()
+    selected_product = st.selectbox("Select a product:", product_names, key="product_selectbox")
+    
+    # Step 4: Filter formulation formats based on the selected product
+    product_filtered_df = filtered_products[filtered_products['PRODUCT NAME'] == selected_product]
+    formulation_formats = product_filtered_df['FORMULATION FORMAT'].unique()
+    selected_format = st.selectbox("Select a formulation format:", formulation_formats, key="format_selectbox")
+    
+    # Step 5: Display the details for the selected product and format
+    final_product_details = product_filtered_df[product_filtered_df['FORMULATION FORMAT'] == selected_format]
+    
+    if not final_product_details.empty:
+        row = final_product_details.iloc[0]  # Assuming only one row matches the selection
         st.subheader(f"Product: {row['PRODUCT NAME']}")
         st.write(f"**INCI Name**: {row['INCI NAME']}")
         st.write(f"**Source**: {row['SOURCE (NAME AND PART)']}")
@@ -52,9 +62,8 @@ if not filtered_df.empty:
         st.write(f"**Appearance**: {row['APPEARANCE']}")
         st.write(f"**Suggested Concentration**: {row['SUGGESTED CONCENTRATION']}")
         st.write(f"**Marketing Claims**: {row['MARKETING CLAIMS']}")
-        st.write(f"**Formulation Type**: {row['FORMULATION FORMAT']}")
 else:
-    st.write("No products found matching your criteria. Please try a different selection.")
+    st.write("No products found matching your selection.")
 
 # Footer with the data source
 st.write("Data sourced from cosmetics.csv uploaded on GitHub")
