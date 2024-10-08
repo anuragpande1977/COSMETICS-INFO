@@ -67,3 +67,4 @@ else:
 
 # Footer with the data source
 st.write("Data sourced from cosmetics.csv uploaded on GitHub")
+
